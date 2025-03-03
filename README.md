@@ -10,9 +10,13 @@ new clustering methods
 data Please choose your own.
 
 
-Dataset: https://www.kaggle.com/datasets/mojtaba142/hotel-booking/data
+Dataset: 
+https://www.kaggle.com/datasets/mojtaba142/hotel-booking/data
 
-Find already existing solutions to preprocessing, k-means, ML applications here: https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand/code?datasetId=511638&sortBy=voteCount
+
+Find already existing solutions to preprocessing, k-means, ML applications here: 
+https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand/code?datasetId=511638&sortBy=voteCount
+
 
 Good solution to work with our dataset: 
 https://www.kaggle.com/code/fahadrehman07/hotel-booking-analysis/notebook 
