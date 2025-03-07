@@ -30,9 +30,8 @@ df_cluster_L_A = df_cleaned[features_L_A].copy()
 scaler = StandardScaler()
 df_cluster_scaled_1 = scaler.fit_transform(df_cluster_L_A)
 
-
 wcss = []
-K_range = range(2, 11) #K should be more than 2
+K_range = range(2, 11) # K should be more than 2
 
 for k in K_range:
     kmeans_1 = KMeans(n_clusters=k, random_state=42, n_init=10)
@@ -82,7 +81,7 @@ for k in k_range:
     kmeans_2.fit(df_cluster_scaled_2)
     wcss.append(kmeans_2.inertia_)
 
-# Plot Elbow Method
+#Elbow Method
 plt.figure(figsize=(8, 5))
 plt.plot(k_range, wcss, marker='o', linestyle='-')
 plt.xlabel('Number of Clusters Needed (K)')
