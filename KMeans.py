@@ -9,7 +9,7 @@ from scipy.spatial import Voronoi, voronoi_plot_2d
 import seaborn as sns
 
 
-df = pd.read_csv (r"C:\Users\User\Downloads\cleaned_dataset.csv")
+df = pd.read_csv("cleaned_dataset.csv")
 
 df
 
@@ -44,12 +44,12 @@ plt.plot(K_range, wcss, marker='o', linestyle='-')
 plt.xlabel('Number of Clusters (K)')
 plt.ylabel('Within-Cluster Sum of Squares')
 plt.title('Elbow Method')
-plt.show()
+
 
 chosen_k_1 = 4  #Biggest drop, less blending 
 kmeans_1 = KMeans(n_clusters=chosen_k_1, random_state=42, n_init=10)
 df_cleaned_1 = df_cleaned.loc[df_cluster_L_A.index]  # Ensure alignment
-df_cleaned_1['Cluster'] = kmeans.fit_predict(df_cluster_scaled_1)
+df_cleaned_1['Cluster'] = kmeans_1.fit_predict(df_cluster_scaled_1)
 
 
 plt.figure(figsize=(10, 5))
@@ -59,7 +59,7 @@ plt.ylabel('ADR')
 plt.title(f'K-Means Clustering, Lead Time vs ADR')
 
 
-centers = scaler.inverse_transform(kmeans.cluster_centers_)
+centers = scaler.inverse_transform(kmeans_1.cluster_centers_)
 plt.scatter(centers[:, 0], centers[:, 1], c='red', marker='X', s=200, label='Centroids')
 
 
@@ -67,7 +67,7 @@ centroid_legend = mpatches.Patch(color='red', label='Centroids (X)')
 plt.legend(handles=[centroid_legend], loc='upper right')
 
 
-plt.show()
+
 
 features_A_R = ['adr', 'total_of_special_requests']
 df_cluster_A_R = df_cleaned[features_A_R].copy()
@@ -88,7 +88,7 @@ plt.xlabel('Number of Clusters Needed (K)')
 plt.ylabel('WCSS')
 plt.title('Elbow Method for Optimal K')
 plt.grid()
-plt.show()
+
 
 chosen_k_2 = 3  
 kmeans = KMeans(n_clusters= chosen_k_2, random_state=42, n_init=10)
