@@ -39,15 +39,13 @@ for n in n_range:
     bic = gmm.bic(df_cluster_scaled_1)
     bic_scores.append(bic)
 
-    aic = gmm.aic(df_cluster_scaled_1)
-    aic_scores.append(aic)
     log_likelihood_scores.append(gmm.score(df_cluster_scaled_1))
     
-    print("n:", n, "BIC:", bic, "AIC:", aic)
+    print("n:", n, "BIC:", bic)
 
 # plottin' BIC
 plt.figure(figsize=(10, 5))
-plt.plot(n_range, bic_scores, label='BIC')
+plt.plot(n_range, bic_scores, marker='o', label='BIC')
 plt.xlabel("Number of clusters")
 plt.ylabel("BIC")
 plt.legend()
