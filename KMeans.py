@@ -7,11 +7,12 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.metrics import silhouette_score
 from scipy.spatial import Voronoi, voronoi_plot_2d
 import seaborn as sns
+import time
+from collections import Counter
 
 
-df = pd.read_csv("cleaned_dataset.csv")
+df = pd.read_csv (r"cleaned_dataset.csv")
 
-df
 
 
 df.describe()
@@ -34,7 +35,7 @@ wcss = []
 K_range = range(2, 11) # K should be more than 2
 
 for k in K_range:
-    kmeans_1 = KMeans(n_clusters=k, random_state=42, n_init=10)
+    kmeans_1 = KMeans(n_clusters=k, random_state=40, n_init=10)
     kmeans_1.fit(df_cluster_scaled_1)
     wcss.append(kmeans_1.inertia_)
 
@@ -44,10 +45,10 @@ plt.plot(K_range, wcss, marker='o', linestyle='-')
 plt.xlabel('Number of Clusters (K)')
 plt.ylabel('Within-Cluster Sum of Squares')
 plt.title('Elbow Method')
-
+plt.show()
 
 chosen_k_1 = 4  #Biggest drop, less blending 
-kmeans_1 = KMeans(n_clusters=chosen_k_1, random_state=42, n_init=10)
+kmeans_1 = KMeans(n_clusters=chosen_k_1, random_state=40, n_init=10)
 df_cleaned_1 = df_cleaned.loc[df_cluster_L_A.index]  # Ensure alignment
 df_cleaned_1['Cluster'] = kmeans_1.fit_predict(df_cluster_scaled_1)
 
@@ -67,6 +68,7 @@ centroid_legend = mpatches.Patch(color='red', label='Centroids (X)')
 plt.legend(handles=[centroid_legend], loc='upper right')
 
 
+plt.show()
 
 
 features_A_R = ['adr', 'total_of_special_requests']
@@ -88,11 +90,11 @@ plt.xlabel('Number of Clusters Needed (K)')
 plt.ylabel('WCSS')
 plt.title('Elbow Method for Optimal K')
 plt.grid()
-
+plt.show()
 
 chosen_k_2 = 3  
-kmeans = KMeans(n_clusters= chosen_k_2, random_state=42, n_init=10)
-df['Cluster'] = kmeans.fit_predict(df_cluster_scaled_2)
+kmeans = KMeans(n_clusters= chosen_k_2, random_state=40, n_init=10)
+df['Cluster'] = kmeans_2.fit_predict(df_cluster_scaled_2)
 
 
 plt.figure(figsize=(10, 6))
@@ -103,7 +105,7 @@ for i in range(chosen_k_2):
                 color=colors[i], label=f'Cluster {i+1}', alpha=0.5)
 
 
-centers = scaler.inverse_transform(kmeans.cluster_centers_)
+centers = scaler.inverse_transform(kmeans_2.cluster_centers_)
 plt.scatter(centers[:, 0], centers[:, 1], c='black', marker='o', s=200, label='Centroid')
 
 
@@ -113,3 +115,43 @@ plt.title(f'K-Means Clustering, ADR vs Special Requests')
 plt.legend()
 
 plt.show()
+
+kmeans_clusters = kmeans_2.fit_predict(df_cluster_scaled_2)
+
+
+def evaluate_clustering(model, data, labels):
+
+    start_time = time.time()
+    model.fit(data)
+    fit_time = time.time() - start_time
+    
+    unique_clusters = set(labels)
+    
+    silhouette = silhouette_score(data, labels) if len(unique_clusters) > 1 and -1 not in labels else 'N/A'
+    log_likelihood = model.score(data) if hasattr(model, "score") else None
+    
+    noise_percentage = (np.sum(labels == -1) / len(labels)) * 100 if -1 in labels else 0
+    
+    cluster_counts = dict(Counter(labels))
+    total_points = len(labels)
+    cluster_sizes_percent = {k: (v / total_points) * 100 for k, v in cluster_counts.items()}
+    
+    plt.figure(figsize=(8, 8))
+    plt.pie(cluster_sizes_percent.values(), colors=plt.cm.Paired.colors, startangle=90, wedgeprops={'edgecolor': 'none'})
+    plt.title('Cluster Size Distribution (%)')
+    plt.axis('equal')
+    plt.show()
+    
+    
+    
+    result = f"""
+    Fit Time (seconds): {fit_time:.4f}
+    Log-Likelihood: {log_likelihood if log_likelihood is not None else 'N/A'}
+    Silhouette Score: {silhouette} 
+    Cluster Size Distribution (%): {cluster_sizes_percent}
+    """
+    
+    return result
+
+kmeans_kpis = evaluate_clustering(kmeans_1, df_cluster_scaled_1, df_cleaned_1['Cluster'])
+print("KMeans KPIs:\n", kmeans_kpis)
