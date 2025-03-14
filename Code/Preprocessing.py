@@ -1,15 +1,12 @@
 import pandas as pd
 
-
 def clean_data(df):
 
     cols_to_drop = ['company', 'agent']
     df.drop(columns=[col for col in cols_to_drop if col in df.columns], inplace=True)
     
-    # Drop rows with missing values
     df.dropna(inplace=True)
     
-    # Remove rows where ADR is negative, zero, or greater than 5000
     if 'adr' in df.columns:
         df = df[(df['adr'] > 0) & (df['adr'] < 5000)]
     
