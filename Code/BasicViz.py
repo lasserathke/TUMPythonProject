@@ -170,21 +170,24 @@ for i, t in enumerate(time_points):
 
 ax2 = ax1.twinx()
 ax2.plot(time_points, percent_remaining / 100, color="black", linestyle="dashed", linewidth=2, label="Data Remaining (%)")  # Normalize
-ax2.set_ylabel("Percentage of Data Remaining", fontsize=12, fontweight="bold", color="black")
+ax2.set_ylabel("Percentage of Data Remaining", fontsize=22, fontweight="bold", color="black")
 
 ax1.set_ylim(0, 1)  # Survival probability from 0 to 1
 ax2.set_ylim(0, 1)  # Convert percentage to 0-1 scale (so 100% is  then 1.0)
 
-ax1.set_xlabel("Days Since Booking (Lead Time)", fontsize=14, fontweight="bold")
-ax1.set_ylabel("Survival Probability (Not Canceled)", fontsize=14, fontweight="bold")
+ax1.set_xlabel("Days Since Booking (Lead Time)", fontsize=22, fontweight="bold")
+ax1.set_ylabel("Survival Probability (Not Canceled)", fontsize=22, fontweight="bold")
+
+ax1.tick_params(axis='x', labelsize=16)
+ax1.tick_params(axis='y', labelsize=16)
+ax2.tick_params(axis='y', labelsize=16)
 
 handles, labels = ax1.get_legend_handles_labels()
 sorted_legend = sorted(zip(labels, handles), key=lambda x: int(x[0].split("-")[0]))  # Sort numerically
 labels, handles = zip(*sorted_legend)  # Unpack sorted tuples
-ax1.legend(handles, labels, title="ADR (€)", fontsize=10)  # Reapply legend in sorted order
 
-# Add legend for percentage line
-ax2.legend(loc="center right")
+ax1.legend(handles, labels, title="ADR (€)", fontsize=14, title_fontsize=18)  # Doubled font size
+ax2.legend(loc="center right", fontsize=14, title_fontsize=15)  # Doubled font size
 
 ax1.grid(True, linestyle="--", alpha=0.5)
 ax2.grid(False)  # Disable separate grid for the secondary y-axis
